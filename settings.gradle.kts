@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "StateInMerge"
-include(":stateInMerge")
+include(":state-in-merge")
