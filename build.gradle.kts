@@ -1,16 +1,10 @@
 import java.io.BufferedReader
 import java.io.FileReader
 
-
 plugins {
-    //trick: for the same plugin versions in all sub-modules
     id("com.android.library").version("8.0.1").apply(false)
     kotlin("multiplatform").version("1.8.20").apply(false)
 }
-
-//tasks.register("clean", Delete::class) {
-//    delete(rootProject.buildDir)
-//}
 
 val props = java.util.Properties()
 FileReader("maven.properties").use { fileReader ->
@@ -25,14 +19,13 @@ FileReader("maven.properties").use { fileReader ->
     }
 }
 
-
 allprojects {
     repositories {
         mavenCentral()
     }
 
     group = "com.tomczyn.state"
-    version = "1.0.0"
+    version = "1.0"
 
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
