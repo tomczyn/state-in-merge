@@ -60,7 +60,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tomczyn.stateInMerge"
+    namespace = "com.tomczyn.state"
     compileSdk = 33
     defaultConfig {
         minSdk = 27

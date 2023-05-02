@@ -1,4 +1,4 @@
-package com.tomczyn.stateInMerge
+package com.tomczyn.state
 
 import kotlin.test.Test
 

@@ -31,7 +31,7 @@ allprojects {
         mavenCentral()
     }
 
-    group = "com.tomczyn.stateInMerge"
+    group = "com.tomczyn.state"
     version = "1.0.0"
 
     apply(plugin = "maven-publish")
