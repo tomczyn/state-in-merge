@@ -12,7 +12,7 @@ To add `state-in-merge` as a dependency in your project, add the following to yo
 
 ```groovy
 dependencies {
-    implementation 'com.tomczyn.state:state-in-merge:1.0'
+    implementation 'com.tomczyn:state-in-merge:1.0'
 }
 ```
 
@@ -20,7 +20,7 @@ For `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("com.tomczyn.state:state-in-merge:1.0")
+    implementation("com.tomczyn:state-in-merge:1.0")
 }
 ```
 

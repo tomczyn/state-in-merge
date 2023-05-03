@@ -56,7 +56,7 @@ allprojects {
 
                 pom {
                     name.set("state-in-merge")
-                    description.set("Extension for MutableStateFlow for better state management ")
+                    description.set("MutableStateFlow extension for better state management ")
                     licenses {
                         license {
                             name.set("MIT License")
