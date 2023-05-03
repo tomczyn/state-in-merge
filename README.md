@@ -12,7 +12,7 @@ To add `state-in-merge` as a dependency in your project, add the following to yo
 
 ```groovy
 dependencies {
-    implementation 'com.tomczyn:state-in-merge:1.0'
+    implementation 'com.tomczyn:state-in-merge:version'
 }
 ```
 
@@ -20,7 +20,7 @@ For `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("com.tomczyn:state-in-merge:1.0")
+    implementation("com.tomczyn:state-in-merge:version")
 }
 ```
 
@@ -33,7 +33,6 @@ import com.example.stateinmerge.*
 
 data class AppState(val countA: Int, val countB: Int)
 
-@ExperimentalCoroutinesApi
 fun main() = runBlocking {
     val state = MutableStateFlow(AppState(0, 0))
 
