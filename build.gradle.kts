@@ -12,7 +12,6 @@ FileReader("maven.properties").use { fileReader ->
         bufferedReader.readLines().forEach { line ->
             if (line.isNotBlank()) {
                 val values = line.split("=", limit = 2)
-                println("Loading ${values[0]}")
                 props[values[0]] = values[1]
             }
         }
@@ -24,7 +23,7 @@ allprojects {
         mavenCentral()
     }
 
-    group = "com.tomczyn.state"
+    group = "com.tomczyn"
     version = "1.0"
 
     apply(plugin = "maven-publish")

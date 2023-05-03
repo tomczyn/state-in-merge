@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
  * @param flow A variable number of flows to merge.
  * @return A new [MutableStateFlow] containing the merged state.
  */
-@ExperimentalCoroutinesApi
 fun <T> MutableStateFlow<T>.stateInMerge(
     scope: CoroutineScope,
     launched: Launched,
@@ -60,7 +59,7 @@ sealed interface Launched {
     object Lazily : Launched
 }
 
-@ExperimentalCoroutinesApi
+@OptIn(ExperimentalCoroutinesApi::class)
 private class MutableStateFlowWithStateInMerge<T>(
     private val scope: CoroutineScope,
     launched: Launched,
