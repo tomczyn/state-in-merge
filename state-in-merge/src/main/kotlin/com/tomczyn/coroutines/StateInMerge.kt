@@ -10,18 +10,18 @@ import kotlinx.coroutines.flow.*
  * @param T The type of the state held by the [MutableStateFlow].
  * @param scope The [CoroutineScope] in which the merging will occur.
  * @param launched The launch strategy to use for merging flows.
- * @param flow A variable number of flows to merge.
+ * @param flows A variable number of flows to merge.
  * @return A new [MutableStateFlow] containing the merged state.
  */
 fun <T> MutableStateFlow<T>.stateInMerge(
     scope: CoroutineScope,
     launched: Launched,
-    vararg flow: StateInMergeContext<T>.() -> Flow<*>,
+    vararg flows: StateInMergeContext<T>.() -> Flow<*>,
 ): MutableStateFlow<T> = MutableStateFlowWithStateInMerge(
     scope = scope,
     state = this,
     launched = launched,
-    flow = flow,
+    lambdas = flows,
 )
 
 /**
@@ -48,7 +48,7 @@ private class MutableStateFlowWithStateInMerge<T>(
     private val scope: CoroutineScope,
     launched: Launched,
     private val state: MutableStateFlow<T>,
-    private val flow: Array<out StateInMergeContext<T>.() -> Flow<*>>,
+    lambdas: Array<out StateInMergeContext<T>.() -> Flow<*>>,
 ) : MutableStateFlow<T> by state {
 
     private val context: StateInMergeContext<T> = object : StateInMergeContext<T> {
@@ -59,30 +59,31 @@ private class MutableStateFlowWithStateInMerge<T>(
             onEach { value -> state.update { state -> mapper(state, value) } }
     }
 
+    private val flows: List<Flow<*>> = lambdas
+        .map { produceFlow -> produceFlow(context) }
+
     init {
         when (launched) {
-            Launched.Eagerly -> launchMerge()
+            Launched.Eagerly -> launchAll()
             Launched.Lazily -> scope.launch {
                 waitForFirstSubscriber()
-                flow.map { produceFlow -> produceFlow(context) }
-                    .merge()
-                    .collect()
+                launchAll()
             }
 
             is Launched.WhileSubscribed -> scope.launch {
-                waitForFirstSubscriber()
-                val flowsList = produceFlows().toMutableList()
-                val jobsList = launchMerge()
+                var jobs: Array<Job> = emptyArray()
                 state.subscriptionCount
                     .map { it > 0 }
                     .distinctUntilChanged()
                     .flatMapLatest { subscribed ->
                         flow<Unit> {
-                            if (subscribed) {
-                                launchInactive(jobsList, flowsList)
-                            } else {
-                                delay(launched.stopTimeoutMillis)
-                                jobsList.forEach { job -> if (job.isActive) job.cancelAndJoin() }
+                            when {
+                                subscribed && jobs.isEmpty() -> jobs = launchAll()
+                                subscribed -> launchInactive(jobs)
+                                !subscribed && jobs.isNotEmpty() -> {
+                                    delay(launched.stopTimeoutMillis)
+                                    jobs.cancelActive()
+                                }
                             }
                         }
                     }
@@ -91,23 +92,22 @@ private class MutableStateFlowWithStateInMerge<T>(
         }
     }
 
-    private fun produceFlows(): List<Flow<*>> = flow
-        .map { produceFlow -> produceFlow(context) }
+    private suspend fun waitForFirstSubscriber() {
+        state.subscriptionCount.first { it > 0 }
+    }
 
-    private fun launchMerge(): Array<Job> = produceFlows()
+    private fun launchAll(): Array<Job> = flows
         .map { flow -> flow.launchIn(scope) }
         .toTypedArray()
 
-    private fun launchInactive(
-        jobsList: Array<Job>,
-        flowsList: MutableList<Flow<*>>
-    ) {
-        jobsList.forEachIndexed { index, job ->
-            if (!job.isActive) jobsList[index] = flowsList[index].launchIn(scope)
+    private fun launchInactive(jobs: Array<Job>) {
+        check(jobs.size == flows.size)
+        jobs.forEachIndexed { index, job ->
+            if (!job.isActive) jobs[index] = flows[index].launchIn(scope)
         }
     }
 
-    private suspend fun waitForFirstSubscriber() {
-        state.subscriptionCount.first { it > 0 }
+    private suspend fun Array<Job>.cancelActive() {
+        forEach { job -> if (job.isActive) job.cancelAndJoin() }
     }
 }
