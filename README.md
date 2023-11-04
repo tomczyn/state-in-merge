@@ -1,12 +1,12 @@
 # state-in-merge
 
-`state-in-merge` is a Kotlin library that provides an extension function for merging multiple flows into a single `MutableStateFlow`. It simplifies the process of updating a shared state based on multiple input flows by offering different launch strategies to control the flow execution.
+`state-in-merge` is a Kotlin library that provides an extension function for merging multiple flows into a single `MutableStateFlow`. It's mirrors `stateIn` design but applied to existing `MutableStateFlow` object with capability to merge multiple flows into single `StateFlow`. It simplifies the process of updating a shared state based on multiple input flows by offering different launch strategies to control the flow execution.
 
 ## Description
 
 `state-in-merge` enables you to merge the states of multiple flows into a single `MutableStateFlow` using different launch strategies, such as `Eagerly`, `Lazily`, and `WhileSubscribed`. This library is particularly useful when working with complex state management scenarios where you need to combine multiple streams of data into a single state flow.
 
-You can read more in this blog post: https://easycontext.io/the-problem-with-statein-operator/
+You can read more about the extension in this blog post: https://easycontext.io/the-problem-with-statein-operator/
 
 ## Adding as a Dependency
 
