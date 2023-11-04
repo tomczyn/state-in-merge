@@ -10,8 +10,8 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.25.3"
 }
 
-group = "com.tomczyn.coroutines"
-version = "0.0.3"
+group = "com.tomczyn"
+version = "1.1.0"
 val artifactId = "state-in-merge"
 
 repositories {
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation(kotlin("test"))
 }
