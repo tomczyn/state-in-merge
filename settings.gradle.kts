@@ -9,4 +9,6 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
 
-rootProject.name = "state-in-merge-2"
+rootProject.name = "coroutines-extensions"
+include("sample")
+include("state-in-merge")
