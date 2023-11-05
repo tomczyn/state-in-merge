@@ -14,7 +14,7 @@ To add `state-in-merge` as a dependency in your project, add the following to yo
 
 ```groovy
 dependencies {
-    implementation 'com.tomczyn.coroutines:state-in-merge:version'
+    implementation 'com.tomczyn.coroutines:state-in-merge:1.1.0'
 }
 ```
 
@@ -22,7 +22,7 @@ For `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("com.tomczyn.coroutines:state-in-merge:version")
+    implementation("com.tomczyn.coroutines:state-in-merge:1.1.0")
 }
 ```
 
@@ -47,6 +47,7 @@ class MyViewModel(
     ...
 }
 ```
+
 
 ```kotlin
 data class AppState(val countA: Int, val countB: Int)
