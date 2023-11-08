@@ -70,7 +70,7 @@ private class MutableStateFlowWithStateInMerge<T>(
                 launchAll()
             }
 
-            is Launched.WhileSubscribed -> scope.launch {
+2           is Launched.WhileSubscribed -> {
                 var jobs: Array<Job> = emptyArray()
                 state.subscriptionCount
                     .map { it > 0 }
@@ -79,7 +79,7 @@ private class MutableStateFlowWithStateInMerge<T>(
                         flow<Unit> {
                             when {
                                 subscribed && jobs.isEmpty() -> jobs = launchAll()
-                                subscribed -> launchInactive(jobs)
+                                subscribed -> launchCancelled(jobs)
                                 !subscribed && jobs.isNotEmpty() -> {
                                     delay(launched.stopTimeoutMillis)
                                     jobs.cancelActive()
@@ -87,7 +87,7 @@ private class MutableStateFlowWithStateInMerge<T>(
                             }
                         }
                     }
-                    .launchIn(this)
+                    .launchIn(scope)
             }
         }
     }
@@ -100,10 +100,10 @@ private class MutableStateFlowWithStateInMerge<T>(
         .map { flow -> flow.launchIn(scope) }
         .toTypedArray()
 
-    private fun launchInactive(jobs: Array<Job>) {
+    private fun launchCancelled(jobs: Array<Job>) {
         check(jobs.size == flows.size)
         jobs.forEachIndexed { index, job ->
-            if (!job.isActive) jobs[index] = flows[index].launchIn(scope)
+            if (job.isCancelled) jobs[index] = flows[index].launchIn(scope)
         }
     }
 
