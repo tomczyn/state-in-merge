@@ -70,7 +70,7 @@ private class MutableStateFlowWithStateInMerge<T>(
                 launchAll()
             }
 
-2           is Launched.WhileSubscribed -> {
+            is Launched.WhileSubscribed -> {
                 var jobs: Array<Job> = emptyArray()
                 state.subscriptionCount
                     .map { it > 0 }
