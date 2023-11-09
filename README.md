@@ -6,8 +6,6 @@
 
 `state-in-merge` enables you to merge the emission of multiple flows into a single `MutableStateFlow` state using different launch strategies, such as `Eagerly`, `Lazily`, and `WhileSubscribed`. This library is particularly useful when working with complex state management scenarios where you need to combine multiple streams of data into a single state flow.
 
-You can read more about the extension in this blog post: https://easycontext.io/the-problem-with-statein-operator/
-
 ## Adding as a Dependency
 
 To add `state-in-merge` as a dependency in your project, add the following to your `build.gradle` file:
